@@ -1,0 +1,69 @@
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    username: guest
+    password: guest
+    port: 5672
+    virtual-host: /
+    listener:
+      simple:
+        #消费者最小数量
+        concurrency: 10
+        #消费者最大数量
+        max-concurrency: 20
+        #限制消费者每次处理一条数据，处理完再处理下一条数据
+        prefetch: 1
+        #启动时默认启动mq
+        auto-startup: true
+        #被拒绝是重新进入队列
+        default-requeue-rejected: true
+    template:
+      retry:
+        #重试
+        enabled: true
+        #访问等待时间
+        initial-interval: 1000ms
+        #重试最大次数
+        max-attempts: 3
+        #重试最大时间间隔
+        max-interval: 10000ms
+        #重试最大时间间隔乘数 比如2第一次等待10s第二次等待20s第三次等待40s
+        multiplier: 1
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    hikari:
+      pool-name: DateHikariCP
+      minimum-idle: 5
+      idle-timeout: 180000
+      maximum-pool-size: 10
+      auto-commit: true
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    timeout: 10000ms
+    lettuce:
+      pool:
+        max-active: 100
+        max-wait: 10000ms
+        max-idle: 200
+        min-idle: 0
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+  type-aliases-package: com.xxxx.seckill.pojo
+logging:
+  level:
+    com.xxxx.seckill.mapper: debug
+
